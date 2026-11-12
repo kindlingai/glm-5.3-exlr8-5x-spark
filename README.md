@@ -190,6 +190,16 @@ This was measured on 2026-10-20 as test runs on a pre-release build. It was neve
 - Limits: the sixth box locks 106 GiB of RAM; five boxes share its one 200G port; the store is empty after a
   restart.
 
+## Help
+
+Ask on Discord (https://discord.gg/8EAvYPV2rE) or open an issue in this repo
+(https://github.com/kindlingai/glm-5.3-exlr8-5x-spark/issues). Say which step failed, and include:
+
+- the command you ran, and the end of `docker logs glm53-5x-spark`, before you remove the container;
+- if it still runs, `docker exec glm53-5x-spark /opt/gr8/gr8 glm53 status`.
+
+Remove addresses and hostnames before you post.
+
 ## Engine pin
 
 This recipe has no engine code. It runs one published gr8 image, named by tag and digest in

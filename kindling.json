@@ -1,8 +1,8 @@
 {
  "version": 1,
  "title": "GLM-5.3",
- "variant": "exlr8, T5X, int4 KV, 737K context",
- "summary": "Full GLM-5.3 on five DGX Sparks at TP=5 with gr8 and the T5X settings: a 737,280-token int4 KV pool, MTP drafting, a QO cache for fast boots, four sessions.",
+ "variant": "exlr8, int4 KV, 737K context",
+ "summary": "Full GLM-5.3 on five DGX Sparks at TP=5 with gr8, tuned for 737K context: a 737,280-token int4 KV pool, MTP drafting, a QO cache for fast boots, four sessions.",
  "model": "kindlingai/glm-5.3-exlr8-k2-k3-k4",
  "hardware": "DGX Spark (GB10)",
  "stack": [
@@ -19,10 +19,10 @@
   "image": "ghcr.io/kindlingai/gr8:v1.0",
   "image_digest": "sha256:11ff2823184b0512ae62e0f1c281c46941cfb0fd81096e1dac4c313ad3fe9413"
  },
- "default_config": "t5x",
+ "default_config": "tp5",
  "configs": [
   {
-   "id": "t5x",
+   "id": "tp5",
    "label": "TP=5",
    "nodes": 5,
    "decode": {

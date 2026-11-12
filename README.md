@@ -208,8 +208,8 @@ This recipe has no engine code. It runs one published gr8 image, named by tag an
 | | |
 |---|---|
 | engine | [kindlingai/gr8](https://github.com/kindlingai/gr8) [`v1.0`](https://github.com/kindlingai/gr8/releases/tag/v1.0) at [`db6f2c1`](https://github.com/kindlingai/gr8/commit/db6f2c17c7b05303b69ce667e416d10340aeb9b7) |
-| image | `ghcr.io/kindlingai/gr8:sha-db6f2c1` |
-| digest | `sha256:d6a054f681e999ae25b95c5bff7c831950dd98b70bf20f480d45a111a86f6925` |
+| image | `ghcr.io/kindlingai/gr8:v1.0` |
+| digest | `sha256:11ff2823184b0512ae62e0f1c281c46941cfb0fd81096e1dac4c313ad3fe9413` |
 
 The results above were measured on the image of gr8 commit [`a555ee2`](https://github.com/kindlingai/gr8/commit/a555ee2a078946332769b5cd412ba3c73c46e242) (`ghcr.io/kindlingai/gr8:sha-a555ee2`). v1.0 is one commit after it, and that commit changes only the README, the docs, the benchmark tools and their result files, not the engine source. This recipe was not booted again on the v1.0 image.
 

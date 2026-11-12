@@ -1,15 +1,15 @@
-# KindlingAI: GLM-5.3 EXLR8 on five DGX Sparks (T5X, 737K context)
+# KindlingAI: GLM-5.3 EXLR8 on five DGX Sparks (737K context)
 
 If you are an agent booting this for someone, read [AGENTS.md](AGENTS.md) first, then the Quickstart.
 
 _**Join our discord to learn more about KindlingAI and `gr8`: https://discord.gg/8EAvYPV2rE**_
 
 Full GLM-5.3 on five DGX Sparks (GB10, 128 GB each) at TP=5, served by [gr8](https://github.com/kindlingai/gr8) from
-[kindlingai/glm-5.3-exlr8-k2-k3-k4](https://huggingface.co/kindlingai/glm-5.3-exlr8-k2-k3-k4), with the T5X settings:
+[kindlingai/glm-5.3-exlr8-k2-k3-k4](https://huggingface.co/kindlingai/glm-5.3-exlr8-k2-k3-k4), tuned for 737K context:
 a 737,280-token int4 KV pool, four chats at once, and a QO cache that cuts the boot to under a minute. This recipe is the
 published gr8 image, pinned by digest, and one `.env` file. Nothing is compiled.
 
-![GLM-5.3 on five DGX Sparks, T5X: decode, prefill and limits](docs/card.png)
+![GLM-5.3 on five DGX Sparks, 737K context: decode, prefill and limits](docs/card.png)
 
 60.5 tok/s for one request writing code · 1,941 tok/s prefill on a 32K prompt · 4 requests at once, 84.8 tok/s in
 total · a 737,280-token KV pool · a fact hidden in a 698K prompt found · boot in 30 s
@@ -95,8 +95,9 @@ uses less memory (7.0 GB a box with the MTP pool, against 8.5 GB).
 
 ### Earlier measurements (October 2026)
 
-T5X was first measured on 2026-10-19 on a pre-release TP=5 build of gr8, on bare metal, with the GPU clock capped at
-2000 MHz and a steering profile loaded (this recipe ships none). These rows have no match in the benchmark above:
+This TP=5 setup was first measured on 2026-10-19 on a pre-release TP=5 build of gr8, on bare metal, with the GPU clock
+capped at 2000 MHz and a steering profile loaded (this recipe ships none). These rows have no match in the benchmark
+above:
 
 | measure | value |
 |---|---|
@@ -149,9 +150,9 @@ The head serves an OpenAI-compatible API on port 8100. Stop the cluster with
   `sudo sysctl -w vm.compaction_proactiveness=0` (gr8's
   [DEPLOY.md](https://github.com/kindlingai/gr8/blob/main/docs/DEPLOY.md#before-you-start) has the permanent form).
 
-## What T5X is
+## The 737K-context settings
 
-T5X is the decode settings of gr8's four-box setup, plus five settings measured at TP=5 (`GR8_K1_TLBW=2048`,
+This recipe uses the decode settings of gr8's four-box setup, plus five settings measured at TP=5 (`GR8_K1_TLBW=2048`,
 `PF_GEMMF32=1`, `ATTN_CTX3=4`, `PF_ISGRT_RG=32`, `PF_ATTN_ROWS=512`), plus:
 
 - `PF_OWN=3` with `QO_CACHE`: the boot took 30 s with the cache and 99-104 s on the boots that wrote it.
@@ -183,7 +184,7 @@ This was measured on 2026-10-20 as test runs on a pre-release build. It was neve
 
 - 10 chats of about 22K on a reduced pool, 30 requests per arm: median first token on restore 2.03 s with the store,
   14.24 s without it. Outputs equal 30 of 30.
-- On the full T5X settings: 8K / 32K prefill 1,570 / 1,545 tok/s and prose decode 39.5 tok/s (inside the noise of
+- On the full TP=5 settings: 8K / 32K prefill 1,570 / 1,545 tok/s and prose decode 39.5 tok/s (inside the noise of
   the October numbers for the same build: 1,572 / 1,569 / 39.8). A fact hidden at 500,460 tokens was found. Lowest free memory 2.45 GB.
 - 4 chats of about 97.5K, pushed out of the pool by a 355K prompt, came back from the sixth box with a first token
   in 1.26-5.51 s. A full prefill takes about 67 s.

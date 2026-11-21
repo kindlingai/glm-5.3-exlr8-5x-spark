@@ -1,4 +1,4 @@
-# For agents: boot GLM-5.3 on five DGX Sparks (737K context)
+# For agents: boot GLM-5.3 on five DGX Sparks (983K context)
 
 You are booting this recipe for someone. Follow the steps in order and run each check. If a check fails, stop and
 tell the person what failed. If this file and `compose.yaml` or `.env.example` disagree, follow those two files and
@@ -36,7 +36,7 @@ On the head:
 
 - `docker compose exec gr8 /opt/gr8/gr8 glm53 health` exits 0.
 - `docker compose exec gr8 /opt/gr8/gr8 glm53 smoke` passes 14 of 14.
-- `curl -s localhost:8100/v1/models` shows `max_model_len` 737276.
+- `curl -s localhost:8100/v1/models` shows `max_model_len` 983034.
 - After the first boot, the `qocache` directory holds 78 `.qo.bin` files (13 GB).
 
 ## 5. Stop

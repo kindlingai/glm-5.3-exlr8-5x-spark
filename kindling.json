@@ -1,8 +1,8 @@
 {
  "version": 1,
  "title": "GLM-5.3",
- "variant": "exlr8, int4 KV, 737K context",
- "summary": "Full GLM-5.3 on five DGX Sparks at TP=5 with gr8, tuned for 737K context: a 737,280-token int4 KV pool, MTP drafting, a QO cache for fast boots, four sessions.",
+ "variant": "exlr8 bit325, int4 KV, 983K context",
+ "summary": "Full GLM-5.3 on five DGX Sparks at TP=5 with gr8 v1.1.0: exlr8 bit325 experts (v0.6), int4 KV with a 983,040-token pool, MTP=3 drafting with confidence stopping, seven bit-exact v1.1.0 kernel paths plus MoE union cap (48 quality default, 32 fast preset), up to 8 concurrent sessions, and 8.8+ GiB free RAM per box.",
  "model": "kindlingai/glm-5.3-exlr8-k2-k3-k4",
  "hardware": "DGX Spark (GB10)",
  "stack": [
@@ -13,11 +13,11 @@
  ],
  "engine": {
   "repo": "kindlingai/gr8",
-  "ref": "v1.0",
-  "commit": "db6f2c17c7b05303b69ce667e416d10340aeb9b7",
+  "ref": "v1.1.0",
+  "commit": "cdd1e0931047f55bba8f682a0ae79c4198668ca3",
   "pin": "image",
-  "image": "ghcr.io/kindlingai/gr8:v1.0",
-  "image_digest": "sha256:11ff2823184b0512ae62e0f1c281c46941cfb0fd81096e1dac4c313ad3fe9413"
+  "image": "ghcr.io/kindlingai/gr8:v1.1.0",
+  "image_digest": "sha256:b22eedbd7902f65dbf2090897d75f5d92276cbf78a16bcde1f958aa56a306cf7"
  },
  "default_config": "tp5",
  "configs": [
@@ -26,9 +26,10 @@
    "label": "TP=5",
    "nodes": 5,
    "decode": {
-    "code": 60.5,
-    "prose": 48.3,
-    "structured": 60.8
+    "code": 68.9,
+    "prose": 50.8,
+    "structured": 71.8,
+    "counting": 74.9
    },
    "decode_prompt_tokens": [
     46,
@@ -37,83 +38,93 @@
    "prefill": [
     {
      "context": 8192,
-     "tps": 1782
+     "tps": 1937
     },
     {
      "context": 32768,
-     "tps": 1941
+     "tps": 1960
     },
     {
      "context": 131072,
-     "tps": 1704
+     "tps": 1837
     }
    ],
    "concurrency": [
     {
      "streams": 1,
-     "aggregate_tps": 52.4
+     "aggregate_tps": 60.9,
+     "per_stream_tps": 61.7,
+     "ttft_p50_s": 0.38
     },
     {
      "streams": 2,
-     "aggregate_tps": 72.8
+     "aggregate_tps": 81.1,
+     "per_stream_tps": 47.3,
+     "ttft_p50_s": 0.76
     },
     {
      "streams": 4,
-     "aggregate_tps": 84.8
+     "aggregate_tps": 104.2,
+     "per_stream_tps": 36.6,
+     "ttft_p50_s": 1.42
     },
     {
      "streams": 8,
-     "aggregate_tps": 85.2
+     "aggregate_tps": 141.5,
+     "per_stream_tps": 29.0,
+     "ttft_p50_s": 3.14
     }
    ],
    "concurrency_prompt_tokens": [
     48,
     55
    ],
-   "max_context": 737276,
-   "kv_pool_tokens": 737280,
-   "max_concurrent": 4,
+   "max_context": 983034,
+   "kv_pool_tokens": 983040,
+   "max_concurrent": 8,
    "max_tokens_per_chat": [
     {
      "chats": 1,
-     "tokens": 737276,
+     "tokens": 983034,
      "source": "measured"
     },
     {
      "chats": 2,
-     "tokens": 360252,
+     "tokens": 425722,
      "source": "computed"
     },
     {
      "chats": 4,
-     "tokens": 171772,
+     "tokens": 147322,
+     "source": "computed"
+    },
+    {
+     "chats": 8,
+     "tokens": 27834,
      "source": "computed"
     }
    ],
    "max_tokens_per_chat_note": "prompt + max_tokens",
    "quality": [
     {
-     "name": "Needle recall",
-     "value": "found at 128K and 698K"
-    },
-    {
-     "name": "KL vs fp8 KV",
-     "value": "0.0159 nats (top-1 96.9%)"
-    },
-    {
-     "name": "75-item check",
-     "value": "72 of 75 (fp8: 72 of 75)"
-    },
-    {
      "name": "Smoke test",
      "value": "14 of 14"
     },
     {
-     "name": "Boot with the QO cache",
-     "value": "30 s"
+     "name": "Needle recall",
+     "value": "found at 128K"
+    },
+    {
+     "name": "Prompt cache",
+     "value": "422 of 423 cached"
+    },
+    {
+     "name": "Boot with QO cache",
+     "value": "60 s"
     }
    ],
-   "notes": "This recipe's .env (int4 KV, the default) on the gr8 sha-a555ee2 image, Docker Compose, stock model. gr8 bench (default level), one boot, GPU clocks uncapped in the timed stages, measured 2026-11-11. Four chats decode at once (SESS=4): in the 8-stream row four requests wait for a slot."
+   "lowest_mem_available_gib": 8.77,
+   "notes": "bit325 experts (3.25 bpw, v0.6 @ 3e388b45), int4 KV (CAP=983,040, SHARE_LIMIT=32,768, SESS=8), MTP=3 with confidence stopping, 7 bit-exact v1.1.0 kernels ON, DEC_BK_MAX=2048, MOE_UNION_CAP=48 quality default (set MOE_UNION_CAP=32 for fast mode: 119.6 tok/s at C=4, 160.5 tok/s at C=8; or 0 for uncapped exact: 89.5 at C=4, 110.5 at C=8). bench/bench.py default level on 2026-11-20, one fresh boot on a 200G switch, GPU clocks uncapped in timed stages."
   }
  ]
 }

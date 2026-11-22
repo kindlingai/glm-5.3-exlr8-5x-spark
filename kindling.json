@@ -2,7 +2,7 @@
  "version": 1,
  "title": "GLM-5.3",
  "variant": "exlr8 bit325, int4 KV, 983K context",
- "summary": "Full GLM-5.3 on five DGX Sparks at TP=5 with gr8 v1.1.0: exlr8 bit325 experts (v0.6), int4 KV with a 983,040-token pool, MTP=3 drafting with confidence stopping, seven bit-exact v1.1.0 kernel paths plus MoE union cap (48 quality default, 32 fast preset), up to 8 concurrent sessions, and 8.8+ GiB free RAM per box.",
+ "summary": "Full GLM-5.3 on five DGX Sparks at TP=5 with gr8 v1.1.1: exlr8 bit325 experts (v0.6), int4 KV with a 983,040-token pool, MTP=3 drafting with confidence stopping, seven bit-exact v1.1.0 kernel paths plus MoE union cap (48 quality default, 32 fast preset), up to 8 concurrent sessions, and 8.8+ GiB free RAM per box.",
  "model": "kindlingai/glm-5.3-exlr8-k2-k3-k4",
  "hardware": "DGX Spark (GB10)",
  "stack": [
@@ -13,11 +13,11 @@
  ],
  "engine": {
   "repo": "kindlingai/gr8",
-  "ref": "v1.1.0",
-  "commit": "cdd1e0931047f55bba8f682a0ae79c4198668ca3",
+  "ref": "v1.1.1",
+  "commit": "a3f44a075854fc9af0ed56c6d43f7739705bc871",
   "pin": "image",
-  "image": "ghcr.io/kindlingai/gr8:v1.1.0",
-  "image_digest": "sha256:b22eedbd7902f65dbf2090897d75f5d92276cbf78a16bcde1f958aa56a306cf7"
+  "image": "ghcr.io/kindlingai/gr8:v1.1.1",
+  "image_digest": "sha256:fa5c9f66fbfa55d162782578b3262893b782e6365a76562bcab951b54acc6d96"
  },
  "default_config": "tp5",
  "configs": [
